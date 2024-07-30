@@ -15,6 +15,7 @@ func main() {
 
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"http://localhost:5173"},
+		AllowMethods: []string{http.MethodGet, http.MethodPost, http.MethodPatch, http.MethodDelete},
 	}))
 
 	e.GET("/", func(c echo.Context) error { return c.String(http.StatusOK, "Tasks API") })
