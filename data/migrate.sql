@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS Tasks (
+	id SERIAL PRIMARY KEY,
+	task VARCHAR(50),
+    "status" VARCHAR(12),
+	dateLimit TIMESTAMP
+);

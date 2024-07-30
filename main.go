@@ -1,37 +1,22 @@
 package main
 
 import (
-	"database/sql"
-	"fmt"
-	"log"
-	"os"
-	"time"
+	"net/http"
+	"todo/routes"
 
-	"github.com/joho/godotenv"
-	_ "github.com/lib/pq"
+	"github.com/labstack/echo/v4"
 )
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("env file load failed")
-	}
+	routes.ConnectDB()
 
-	dsn := os.Getenv("CONN_STR")
-	db, err := sql.Open("postgres", dsn)
-	if err != nil {
-		log.Fatal("failed to connect database", err)
-	}
-	fmt.Println("Database connection was successful")
+	e := echo.New()
 
-	loc, _ := time.LoadLocation("America/Buenos_Aires")
-	now := time.Now().In(loc)
+	e.GET("/", func(c echo.Context) error { return c.String(http.StatusOK, "Tasks API") })
+	e.GET("/task", routes.GetTasks)
+	e.POST("/task", routes.PostTask)
+	e.PATCH("/task/:id", routes.PatchTask)
+	e.DELETE("/task/:id", routes.DeleteTask)
 
-	fmt.Println(now)
-	err = db.QueryRow("SELECT NOW()").Scan(&now)
-	if err != nil {
-		log.Fatal("failed to execute query", err)
-	}
-
-	fmt.Println(now)
+	e.Logger.Fatal(e.Start(":3000"))
 }
