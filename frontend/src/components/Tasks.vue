@@ -30,6 +30,7 @@
         }).then(() => {
             this.snkMsg = 'Task added successfully'
             this.snackbar = true
+            this.getTasks()
         }).catch((err) => {
             this.snkMsg = "Couldn't add task: "+err
         })
@@ -51,6 +52,7 @@
         .then(() => {
             this.snkMsg = 'Task deleted successfully'
             this.snackbar = true
+            this.getTasks()
         }).catch((err) => {
             this.snkMsg = "Task couldn't be deleted"
             this.snackbar = true
