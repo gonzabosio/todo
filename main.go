@@ -5,12 +5,18 @@ import (
 	"todo/routes"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 func main() {
 	routes.ConnectDB()
 
 	e := echo.New()
+
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"http://localhost:5100"},
+		AllowMethods: []string{http.MethodGet, http.MethodPost, http.MethodPatch, http.MethodDelete},
+	}))
 
 	e.GET("/", func(c echo.Context) error { return c.String(http.StatusOK, "Tasks API") })
 	e.GET("/task", routes.GetTasks)

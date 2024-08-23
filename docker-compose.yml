@@ -1,0 +1,27 @@
+version: '2.28.1'
+
+services:
+  backend:
+    build:
+      context: ./
+    ports:
+      - "3000:3000"
+    environment:
+      - CONN_STR=postgresql://gonzabosio:jjQtVk8ZYL_zRITYkRoSzA@nebula-2387.g8x.gcp-southamerica-east1.cockroachlabs.cloud:26257/todo?sslmode=verify-full
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "5100:5100"
+
+  db:
+    image: cockroachdb/cockroach:v24.1.2
+    ports:
+      - "26257:26257"
+      - "5200:5200"
+    command: start-single-node --insecure
+    volumes:
+      - "${PWD}/cockroach-data/crdb:/cockroach/cockroach-data"
